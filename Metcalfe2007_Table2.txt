@@ -1,0 +1,48 @@
+# Number of postings by category in AAS Job Register
+# Based on Table 2 from Metcalfe 2007 http://arxiv.org/abs/0712.2820v2
+# Table 2 ends in 2006, and was gathered from the annual reports of the AAS.
+# From the 2004-2005 report, these were the options for categories:
+#     Postdoc: Fellowships and other semi-permanent postdoctoral positions.
+#     Tenure-Track: Academic appointments which are tenured or tenured-track.
+#     Non-Tenure Track: Academic appointments which are not tenured or tenure-track.
+#     Research: Positions in which research is the primary focus.
+#     Research Support: Positions in which the majority of the work is at the direction of another.
+#     Management: Positions which are administrative or managerial in focus.
+#     Visiting: A temporary position at a particular institution, typically a teaching position.
+#     Other: Also includes positions which do not fit into the other categories.
+# In Metcalfe 2007, Management and Other are combined. Postdoc and Visiting are combined.
+# Each year's statistics are June of that year to June of the next year.
+#   e.g. 2003 is June 2003-June 2004.
+# Institution types, also from 2004-2005 AAS Report https://aas.org/archives/BAAS/v38n1/AR2004-2005.pdf
+#     Large Academic: Academic institutions with a separate astronomy department.
+#     Small Academic: Primarily colleges without a separate astronomy department.
+#     Research Lab: All labs and observatories which do not specifically fit into the other categories. Includes NOAO and NRAO.
+#     Foreign: All institutions outside of the U.S., including Canada and Mexico.
+#     Government Agency: Self-explanatory. Includes jobs through USRA.
+#     Industry: All private companies. Many have contracts with public institutions.
+#     Planetarium/Museum: Those not affiliated with government or academic institutions
+#     Other: Any employer who does not fit the other categories.
+Year All PV TT NT R RS MO F 
+1984 275 77 66 ... 72 ... ... ... 
+1985 338 149 81 ... 118 ... ... ... 
+1986 257 ... ... ... ... ... ... ... 
+1987 240 ... ... ... ... ... ... ... 
+1988 321 157 ... ... ... ... ... ... 
+1989 351 ... ... ... ... ... ... ... 
+1990 240 120 32 ... ... ... ... ... 
+1991 304 137 30 ... ... ... ... ... 
+1992 327 127 40 13 63 57 21 0.140 
+1993 315 66 59 12 42 60 23 0.160 
+1994 318 140 44 15 14 76 24 0.233 
+1995 425 200 54 23 73 52 17 0.268 
+1996 426 210 63 15 65 56 15 0.211 
+1997 469 208 74 9 55 49 65 0.230 
+1998 569 224 77 23 112 68 51 0.210 
+1999 623 206 94 43 130 38 67 0.230 
+2000 739 277 108 39 132 66 63 0.264 
+2001 715 310 93 59 93 56 78 0.288 
+2002 716 370 117 29 109 3 46 0.198 
+2003 722 389 119 22 78 29 85 0.072 
+2004 714 333 113 22 117 28 101 0.251 
+2005 673 334 111 14 88 19 102 0.276 
+2006 738 388 129 22 87 19 93 0.276

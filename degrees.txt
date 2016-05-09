@@ -1,0 +1,56 @@
+# Estimates of Astronomy PhDs granted by year.
+# Based on left half Table 1 from Metcalfe 2007 http://arxiv.org/abs/0712.2820v2
+# See that paper for explanation on the 3 different sources.
+# 
+# That table ended in 2006 (not including SED estimate)
+# 2007-2014 AIP statistics added from https://www.aip.org/sites/default/files/statistics/rosters/astrost14.pdf
+# 2006-2014 SED statistics added from http://www.nsf.gov/statistics/2016/nsf16300/data-tables.cfm (Table 13)
+# 2007-2014 UMI statistics added from http://search.proquest.com/advanced
+#    After consulting with the ProQuest support in May 2016, it doesn't seem there is a way 
+#    to limit the “Dissertations & Theses” database to those awarded by a domestic university. 
+Year AIP SED UMI
+1970 ... 111 141
+1971 ... 113 119 
+1972 75 129 173
+1973 80 131 147
+1974 97 133 172
+1975 76 131 162
+1976 93 150 186
+1977 96 120 164
+1978 93 138 173
+1979 90 115 152
+1980 106 121 133 
+1981 82 109 144
+1982 70 102 121
+1983 81 115 129
+1984 74 98 120
+1985 66 100 150
+1986 86 109 132
+1987 72 100 166
+1988 94 130 171
+1989 94 113 223
+1990 89 128 240
+1991 73 125 233
+1992 93 134 254
+1993 119 145 256 
+1994 117 144 271 
+1995 133 173 321 
+1996 126 192 303 
+1997 117 198 320 
+1998 116 206 310 
+1999 88 159 267
+2000 139 185 291 
+2001 101 186 253 
+2002 102 141 251 
+2003 88 167 254
+2004 116 165 297 
+2005 91 186 269
+2006 119 197 284
+2007 125 223 ...
+2008 161 249 ...
+2009 141 262 ...
+2010 156 266 ...
+2011 160 287 ...
+2012 152 274 ...
+2013 155 302 ...
+2014 147 290 ...
