@@ -1,5 +1,5 @@
 # Estimates of Astronomy PhDs granted by year.
-# Based on left half Table 1 from Metcalfe 2007 http://arxiv.org/abs/0712.2820v2
+# Based on left half Table 1 from Metcalfe 2008 http://iopscience.iop.org/article/10.1086/528878 
 # See that paper for explanation on the 3 different sources.
 # 
 # That table ended in 2006 (not including SED estimate)

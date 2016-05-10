@@ -13,8 +13,8 @@ df=df[df.acyear<=2014]
 deg=pd.read_csv('./degrees.txt',comment='#',delim_whitespace=True,na_values='...')
 deg=deg.rename(columns={'Year':'acyear'})
 deg=deg.set_index('acyear')
-# Add Metcalfe2007_Table2 to fill out 1984-2002. Don't need 2003 and beyond.
-m07t2=pd.read_csv('./Metcalfe2007_Table2.txt',comment='#',delim_whitespace=True,na_values='...')
+# Add Metcalfe2008_Table2 to fill out 1984-2002. Don't need 2003 and beyond.
+m07t2=pd.read_csv('./Metcalfe2008_Table2.txt',comment='#',delim_whitespace=True,na_values='...')
 m07t2=m07t2[m07t2.Year<2003]
 m07t2=m07t2.rename(columns={'Year':'acyear','NT':'NTT','R':'Rsrch','RS':'RS'})
 m07t2=m07t2.set_index('acyear')
@@ -55,7 +55,7 @@ table1=pd.concat([table1,pd.DataFrame(table1.sum(axis=1),columns=['All'])],axis=
 table1=pd.concat([m07t2,table1],axis=0,join='outer')
 table1.to_csv('./jobregister_categories_byyear.csv')
 
-# Plot total data here. Matches Metcalfe 2007 Figure 3, jobs per year
+# Plot total data here. Matches Metcalfe 2008 Figure 3, jobs per year
 plt.clf()
 plt.plot(table1.index,table1['All'],label='All Jobs',color='k')
 plt.plot(table1.index,table1['TT'],label='Tenure-Track',color='green')
@@ -67,11 +67,24 @@ plt.axvline(2006,color='gray')
 plt.legend(loc='best')
 pdf.savefig()
 
-# Metcalfe 2007 Figure 3, job register ads / new PhDs
+# Metcalfe 2008 Figure 3, job register ads / new PhDs
 # Would be best to use UMI measures, but we don't have that.
 table1=pd.concat([table1,deg],axis=1,join='outer')
 plt.clf()
+plt.plot(table1.index,table1['UMI']/table1['AIP'])
+plt.plot(table1.index,table1['UMI']/table1['SED'])
+useavg=np.all([table1.index>=1990,table1.index<=2006],axis=0)
+avgAIP=np.average(table1['UMI'][useavg]/table1['AIP'][useavg])
+avgSED=np.average(table1['UMI'][useavg]/table1['SED'][useavg])
+plt.axhline(avgAIP)
+plt.axhline(avgSED)
+plt.legend(loc='best')
+
+plt.clf()
 plt.plot(table1.index,table1['All']/table1['UMI'],label='All Jobs',color='k')
+plt.plot(table1.index,table1['All']/(table1['SED']*avgSED),label='All Jobs, SED avg')
+plt.plot(table1.index,table1['All']/(table1['AIP']*avgAIP),label='All Jobs, AIP avg')
+plt.legend(loc='best')
 # Come back to this.
 pdf.savefig()
 
