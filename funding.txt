@@ -1,0 +1,48 @@
+# Research funding for astronomy
+# Based on right hand side of Table 1 from Metcalfe 2008 http://iopscience.iop.org/article/10.1086/528878
+#   ... which goes through 2004
+# Reported as ACTUAL dollar amounts in M$. 
+# 1970-2003 Meeks 2004: http://www.nsf.gov/statistics/nsf04335/ 
+#     Table 1A: Federal obligations for total research, by detailed field of science & engineering: All agencies, fiscal years 1970-2003
+#         Category: Physical sciences --> Astronomy (First column, Total)
+#     Table 1K: Federal obligations for total research, by detailed field of science & engineering: National Aeronautics & Space Administration, fiscal years 1970-2003
+#         Category: Physical sciences --> Astronomy (Second column, NASA)
+#     Table 1L: Federal obligations for total research, by detailed field of science & engineering: National Science Foundation, fiscal years 1970-2003	
+Year Total NASA NSF 
+1970 136.455 100.875 19.922 
+1971 126.852 90.688 23.236 
+1972 136.405 89.859 25.608 
+1973 123.085 82.020 27.080 
+1974 136.030 91.564 30.283 
+1975 168.319 122.002 29.093 
+1976 163.093 116.575 31.754 
+1977 197.305 140.702 41.585 
+1978 213.601 148.603 46.614 
+1979 284.429 213.272 51.064 
+1980 285.671 229.724 34.512 
+1981 281.027 198.674 59.146 
+1982 275.784 184.630 65.411 
+1983 357.416 265.687 64.638 
+1984 382.292 277.013 77.534 
+1985 414.743 310.668 76.554 
+1986 468.160 362.547 77.808 
+1987 522.187 410.651 76.789 
+1988 470.838 364.730 77.638 
+1989 541.939 428.963 83.373 
+1990 597.154 462.320 104.613 
+1991 631.657 501.766 101.712 
+1992 739.057 584.504 116.126 
+1993 686.281 520.184 109.711 
+1994 747.590 562.962 122.065 
+1995 764.458 593.089 126.225 
+1996 728.958 570.450 119.946 
+1997 774.740 621.324 115.212 
+1998 732.150 575.093 113.248 
+1999 757.859 578.973 124.395 
+2000 880.267 710.006 130.702 
+2001 759.195 559.539 153.919 
+2002 751.527 540.243 167.921 
+2003 871.757 639.761 192.179 
+2004 920.763 678.304 202.092 
+2005  ... ... ...
+2006  ... ... ...
