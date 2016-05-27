@@ -64,7 +64,7 @@ table2=df.groupby('acyear')['instclass'].value_counts().unstack(1).to_csv('./job
 
 
 ##### START PLOTTING. Totally inconsistent methods here.
-# Plot PhD recipients and funding vs. time. Matches Metcalfe 2008 Figure 1.
+# PAGE 1: Plot PhD recipients and funding vs. year. Matches Metcalfe 2008 Figure 1.
 # No funding info yet until we get the inflation indices.
 plt.cla()
 ax=deg.plot(kind='line')
@@ -73,7 +73,7 @@ ax.set_xlabel('Academic Year')
 ax.set_ylabel('Astronomy PhDs Awarded')
 pdf.savefig()
 
-# Plot total data here. Matches Metcalfe 2008 Figure 3, jobs per year
+# PAGE 2: Job Register Ads vs. year. Matches Metcalfe 2008 Figure 3, jobs per year
 plt.clf()
 plt.plot(table1.index,table1['All'],label='All Jobs',color='k')
 plt.plot(table1.index,table1['TT'],label='Tenure-Track',color='green')
@@ -100,8 +100,9 @@ avgSED=np.average(table1['UMI'][useavg]/table1['SED'][useavg])
 plt.axhline(avgAIP)
 plt.axhline(avgSED)
 plt.legend(loc='best')
+# Do not save this plot.
 
-# Now plot job register ads/ new PhDs
+# PAGE 3: Now plot job register ads/ new PhDs vs. Year, Totals nly
 plt.clf()
 plt.plot(table1.index,table1['All']/table1['UMI'],label='All Jobs, using UMI',color='k')
 plt.plot(table1.index,table1['All']/(table1['SED']*avgSED),label='All Jobs, using SED to UMI avg')
@@ -109,10 +110,21 @@ plt.plot(table1.index,table1['All']/(table1['AIP']*avgAIP),label='All Jobs, usin
 plt.legend(loc='best')
 plt.xlabel('Academic Year')
 plt.ylabel('Job Register Ads / New PhD')
-# Come back to this.
 pdf.savefig()
 
-
+# PAGE 4: Job register ads / new PhDs vs. Year, by Category
+plt.clf()
+plt.plot(table1.index,table1['All']/(table1['SED']*avgSED),label='All Jobs',color='k')
+plt.plot(table1.index,table1['TT']/(table1['SED']*avgSED),label='Tenure-Track',color='green')
+plt.plot(table1.index,table1['PV']/(table1['SED']*avgSED),label='Postdoc/Research',color='b',linestyle='dotted')
+plt.plot(table1.index,table1['NTT']/(table1['SED']*avgSED),label='Non-Tenure-Track',color='r',linestyle='--')
+plt.plot(table1.index,table1['RS']/(table1['SED']*avgSED),label='Research Support',color='cyan',linestyle='--')
+plt.plot(table1.index,table1['MO']/(table1['SED']*avgSED),label='Other',color='magenta',linestyle='-.')
+plt.axvline(2006,color='gray') # This indicates where Metcalfe 2008 left off.
+plt.ylabel('Job Register Ads / New PhD')
+plt.xlabel('Academic Year')
+plt.legend(loc='best')
+pdf.savefig()
 
 
 #### PLOTS AND STATISTICS OF JUST OUR DATA
@@ -129,58 +141,64 @@ ax1.set_xlabel('Year Posted')
 #pdf.savefig(ax1.figure)
 
 # Loop for future plots...
-nplot=5
+nplot=4
 for i in range(nplot):
     plt.cla()
     
     if i==0:
         group=df.groupby(df.acyear)['category']
         ytitle=''
+        xtitle='Academic Year'
     elif i==1: 
         group=df.groupby(df.acyear)['instclass']
         ytitle=''
+        xtitle='Academic Year'
+    #elif i==2:
+    #    group=df.groupby('month')['year']
+    #    ytitle=''
     elif i==2:
-        group=df.groupby('month')['year']
-        ytitle=''
-    elif i==3:
         group=df.groupby(df.category)['instclass']
         ytitle=''
-    elif i==4: 
+        xtitle='Job Category'
+    elif i==3: 
         group=df[df.instclass=='Foreign'].groupby(df.year)['category']
-        ytitle='Foreign Only'
+        ytitle='Foreign Only, '
+        xtitle='Academic Year'
     
-    # Stacked, then unstacked
-    for stacked in [True,False]:
+    # Stacked, then unstacked. No, don't do unstacked.
+    for stacked in [True]:  #[True,False]
         plt.cla()
-        ax=group.value_counts().unstack(1).plot(kind='bar',ax=ax1,color=color8,
+        ax=group.value_counts().unstack(1).plot(kind='bar',color=color8,ax=ax1,
             stacked=stacked,figsize=(11,8))
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.10),
               ncol=3, fancybox=True, shadow=True,fontsize=10)
-        ax.set_ylabel(ytitle)
+        ax.set_ylabel(ytitle+'Number of Job Register Ads')
+        ax.set_xlabel(xtitle)
         pdf.savefig(ax.figure)
     
     # Then stacked and percentage.
     plt.cla()
-    ax=group.value_counts(normalize=True).unstack(1).plot(kind='bar',ax=ax1,color=color8,
+    ax=group.value_counts(normalize=True).unstack(1).plot(kind='bar',color=color8,ax=ax1,
             stacked=True,figsize=(11,8))
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
               ncol=3, fancybox=True, shadow=True,fontsize=10)
-    ax.set_ylabel(ytitle)      
+    ax.set_ylabel(ytitle+'Fraction of Job Register Ads')      
+    ax.set_xlabel(xtitle)
     pdf.savefig(ax.figure)    
 
-    # Line plot of percentage
-    plt.cla()
-    ax=group.value_counts(normalize=True).unstack(1).plot(kind='line',ax=ax1,color=color8,
-            stacked=False,figsize=(11,8))
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
-              ncol=3, fancybox=True, shadow=True,fontsize=10)
-    ax.set_ylabel(ytitle)
-    pdf.savefig(ax.figure)    
+    # Line plot of percentage. No, don't do.
+    #plt.cla()
+    #ax=group.value_counts(normalize=True).unstack(1).plot(kind='line',ax=ax1,color=color8,
+    #        stacked=False,figsize=(11,8))
+    #ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
+    #          ncol=3, fancybox=True, shadow=True,fontsize=10)
+    #ax.set_ylabel(ytitle)
+    #pdf.savefig(ax.figure)    
     
 # Histograms, one subplot per job type, with histogram of institutions
 plt.cla()
 ax=df.groupby(df.instclass)['category']\
-    .value_counts().unstack(1).plot(kind='bar',ax=ax1,color=color8,subplots=True,
+    .value_counts().unstack(1).plot(kind='bar',color=color8,subplots=True, ax=ax1,
     layout=(2,4),legend=False,figsize=(11,8),sharex=True)
 pdf.savefig(ax[0][0].figure)
 

@@ -6,6 +6,11 @@ http://iopscience.iop.org/article/10.1086/528878
 TL;DR version: jobregister\_table.csv is a document with all AAS job register data from 
 January 2002 through (currently) May 2016. Run plot_jobregister.py to see informative plots.
 
+To Add, Ways to Contribute:
+- Update funding table in actual dollars.
+- Add table of inflation indicies per year.
+- Combine aforementioned two tables to have inflation-adjusted budgets by year for comparison and plotting.
+
 Scripts:
 - search_jobregister.py: requires BeautifulSoup for crawling and scraping.
     If docrawl=True, produces jobregister\_urls.txt.
