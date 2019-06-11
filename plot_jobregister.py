@@ -3,12 +3,23 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
+# 2019-06-10: Major updates. Combine original job table with new
+# one collected in 2019. Read in funding data.
+
 # Read in the .csv file as a pandas dataframe
+# Combine the two separate tables.
 df = pd.read_csv('./jobregister_table.csv')
-# Only choose academic years between 2003 and 2014 (inclusive), which are
-# complete as of May 2016
+df['country']='unknown'
+df.set_index('i')
+df2= pd.read_csv('./jobregister_table_2019.csv')
+df2['i']+=len(df)
+df2.set_index('i')
+df=df.append(df2,sort=False)
+df.reset_index(drop=True)
+# Only choose academic years between 2003 and 2018 (inclusive), which are
+# complete as of June 2019
 df = df[df.acyear >= 2003]
-df = df[df.acyear <= 2014]
+df = df[df.acyear <= 2018]
 
 # Read in the additional tables.
 # Read in the degree information by year
@@ -27,6 +38,16 @@ m07t2 = m07t2.set_index('acyear')
 m07t2['PV'] = m07t2['PV'] + m07t2['Rsrch']
 del m07t2['Rsrch']
 del m07t2['F']
+# 2019 read in the funding tables.
+fund = pd.read_csv('./funding.txt', comment='#', 
+                   delim_whitespace=True, na_values='...')
+deflate = pd.read_csv('./funding_deflators.txt', comment='#', 
+                   delim_whitespace=True, na_values='...')
+fund=pd.merge(fund,deflate,how='outer',on='Year')
+fund['Total_Real']=fund['Total']/fund['Deflator']
+fund['NASA_Real']=fund['NASA']/fund['Deflator']
+fund['NSF_Real']=fund['NSF']/fund['Deflator']
+fund = fund.set_index('Year')
 
 # SETUP PLOTTING PARAMETERS
 pdffile = './jobregister_plots.pdf'
@@ -76,29 +97,44 @@ table1 = pd.concat([table1, deg], axis=1, join='outer')
 #  E.g., canadian universities classified as "large academic/small academic"
 #  No "foreign" category before 2003
 #  Need to scrape country from contact field to get this right.
-wUS = (df.instclass != 'Foreign') & (df.acyear >= 2003)
+#  2019: Academic years 2016-2018 now do have this country info.
+#  How many are miscategorized?
+df['ShouldBeForeign']=(df.country != 'United States of America') & (df.country != 'unknown')
+wUS = (df.instclass != 'Foreign') & (df.acyear >= 2003) & (df.ShouldBeForeign == False)
 table1US = df[wUS].groupby('acyear')['category'].value_counts().unstack(1)
 # Add a column with "All"
 table1US = pd.concat([table1US, pd.DataFrame(
     table1US.sum(axis=1), columns=['All'])], axis=1)
-table1US = pd.concat([m07t2, table1US], axis=0, join='outer')
+#table1US = pd.concat([m07t2, table1US], axis=0, join='outer') # Don't concatenate with pre-2003.
 table1US.to_csv('./jobregister_categories_byyear_USonly.csv')
 # Add degree data to table1, jobs per year, for plotting.
 table1US = pd.concat([table1US, deg], axis=1, join='outer')
 
+# Make a new instclass category, recategorize ones that should be Foreign. 
+df['instclass_wforeign']=df['instclass']
+df['instclass_wforeign'][df['ShouldBeForeign']]='Foreign'
+
 # Second table: Institution Class by Year
 table2 = df.groupby('acyear')['instclass'].value_counts().unstack(
     1).to_csv('./jobregister_instclass_byyear.csv')
-
+table2US = df.groupby('acyear')['instclass_wforeign'].value_counts().unstack(
+    1).to_csv('./jobregister_instclass_byyear_USonly.csv')
+    
 
 # START PLOTTING. Totally inconsistent methods here.
-# PAGE 1: Plot PhD recipients and funding vs. year. Matches Metcalfe 2008 Figure 1.
-# No funding info yet until we get the inflation indices.
+# PAGE 1A: Plot PhD recipients and funding vs. year. Matches Metcalfe 2008 Figure 1.
 plt.cla()
 ax = deg.plot(kind='line')
-ax.axvline(2006, color='gray')
+#ax.axvline(2006, color='gray')
 ax.set_xlabel('Academic Year')
 ax.set_ylabel('U.S. Astronomy PhDs Awarded')
+pdf.savefig()
+
+# PAGE 1B: Plot funding vs. year. Other part of Metcalfe 2008 Figure 1.
+plt.cla()
+ax = fund[['Total_Real','NASA_Real','NSF_Real']].plot(kind='line')
+ax.set_xlabel('Fiscal Year')
+ax.set_ylabel('Federal Astronomy Research Funding (2009M$)')
 pdf.savefig()
 
 # PAGE 2: Job Register Ads vs. year. Matches Metcalfe 2008 Figure 3, jobs
@@ -166,6 +202,8 @@ plt.axvline(2006, color='gray')  # This indicates where Metcalfe 2008 left off.
 plt.ylabel('All Job Register Ads / New U.S. PhD')
 plt.xlabel('Academic Year')
 plt.legend(loc='best')
+xlim4=plt.xlim() # Save for next one.
+ylim4=plt.ylim() # Save for next one.
 pdf.savefig()
 
 # PAGE 4b: Job register ads for US positions/ new PhDs vs. Year, by Category
@@ -183,10 +221,13 @@ plt.plot(table1US.index, table1US['RS'] / (table1US['SED'] * avgSED),
 plt.plot(table1US.index, table1US['MO'] / (table1US['SED'] * avgSED),
          label='Other', color='magenta', linestyle='-.')
 plt.axvline(2006, color='gray')  # This indicates where Metcalfe 2008 left off.
-plt.ylabel('Non-"Foreign" Job Register Ads / New U.S. PhD')
+plt.ylabel('US-Only Job Register Ads/ New U.S. PhD')
+plt.title('Redone Foreign classification for 2016 and up')
 plt.xlabel('Academic Year')
-plt.xlim(2003, 2015)
+plt.xlim(xlim4) # For visual comparison to the above graph.
+plt.ylim(ylim4)
 plt.legend(loc='best')
+plt.axvline(2016, color='black') # Where new categorization starts
 pdf.savefig()
 
 
@@ -204,7 +245,7 @@ ax1.set_xlabel('Year Posted')
 # pdf.savefig(ax1.figure)
 
 # Loop for future plots...
-nplot = 4
+nplot = 6
 for i in range(nplot):
     plt.cla()
 
@@ -214,18 +255,28 @@ for i in range(nplot):
         xtitle = 'Academic Year'
     elif i == 1:
         group = df.groupby(df.acyear)['instclass']
-        ytitle = ''
+        ytitle = 'Original Classification, '
         xtitle = 'Academic Year'
     # elif i==2:
     #    group=df.groupby('month')['year']
     #    ytitle=''
     elif i == 2:
-        group = df.groupby(df.category)['instclass']
-        ytitle = ''
-        xtitle = 'Job Category'
+        group = df.groupby(df.acyear)['instclass_wforeign']
+        ytitle = 'Redone Foreign Classification (2016 and up)'
+        xtitle = 'Academic Year'
     elif i == 3:
-        group = df[df.instclass == 'Foreign'].groupby(df.year)['category']
+        group = df.groupby(df.category)['instclass_wforeign']
+        ytitle = ''
+        xtitle = 'Job Category, redone Foreign classification (2016 and up)'
+    elif i == 4:
+        group = df[df.instclass_wforeign == 'Foreign']
+        group = group.groupby(group.year)['category']
         ytitle = 'Foreign Only, '
+        xtitle = 'Academic Year'
+    elif i == 5:
+        group = df[df.instclass_wforeign != 'Foreign']
+        group = group.groupby(group.year)['category']
+        ytitle = 'US Only, '
         xtitle = 'Academic Year'
 
     # Stacked, then unstacked. No, don't do unstacked.
@@ -238,6 +289,7 @@ for i in range(nplot):
                   ncol=3, fancybox=True, shadow=True, fontsize=10)
         ax.set_ylabel(ytitle + 'Number of Job Register Ads')
         ax.set_xlabel(xtitle)
+        if i>=3: ax.axvline(2015.5,color='gray')
         pdf.savefig(ax.figure)
 
     # Then stacked and percentage.
@@ -262,6 +314,13 @@ for i in range(nplot):
 # Histograms, one subplot per job type, with histogram of institutions
 plt.cla()
 ax = df.groupby(df.instclass)['category']\
+    .value_counts().unstack(1).plot(kind='bar', color=color8, subplots=True, ax=ax1,
+                                    layout=(2, 4), legend=False, figsize=(11, 8), sharex=True)
+pdf.savefig(ax[0][0].figure)
+
+# Histograms, one subplot per job type, with histogram of institutions
+plt.cla()
+ax = df.groupby(df.instclass_wforeign)['category']\
     .value_counts().unstack(1).plot(kind='bar', color=color8, subplots=True, ax=ax1,
                                     layout=(2, 4), legend=False, figsize=(11, 8), sharex=True)
 pdf.savefig(ax[0][0].figure)
