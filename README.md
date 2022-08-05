@@ -43,7 +43,9 @@ Scripts:
     Not necessary to rerun to use analysis; the .txt and .csv files are in the repo.
     The AAS job register website has changed, and this no longer works.
 - search\_jobregister\_2019.py: like above, but updated for new job register website.
-    Hard-coded to search a certain date range. 
+    Hard-coded to search a certain date range, June 2016 - May 2019
+- search\_jobregister\_2022.py: enough has changed since 2019 that I just made a new
+	script to add the job data from June 2019 - May 2022. 
 - plot\_jobregister.py: produce some summary tables (see below) and plots (jobregister\_plots.pdf). Requires pandas.
 
 Tables Included:
@@ -53,6 +55,9 @@ Tables Included:
 - Produced by search\_jobregister\_2019.py:
     - jobregister\_urls\_2019.txt
     - jobregister\_table\_2019.csv
+- Produced by search\_jobregister\_2019.py:
+    - jobregister\_urls\_2022.txt
+    - jobregister\_table\_2022.csv
 - Update manually:
     - degrees.txt: Estimates of astronomy PhDs produced per year via 3 sources, 
     based on Metcalfe 2008 Table 1.

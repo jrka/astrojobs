@@ -137,6 +137,19 @@ ax.set_xlabel('Fiscal Year')
 ax.set_ylabel('Federal Astronomy Research Funding (2009M$)')
 pdf.savefig()
 
+# PAGE 1C: Combine the previous two, in a nicer format, for white paper.
+plt.cla()
+fig,ax1=plt.subplots()
+#ax1.plot(deg['AIP'],color=color8[0],linestyle='solid',label='AIP')
+ax1.plot(deg['SED'],color=color8[1],linestyle='solid')
+ax1.set_xlabel('Academic Year or Fiscal Year')
+ax1.set_ylabel('Number of Astronomy PhDs (Solid)')
+ax2=ax1.twinx()
+ax2.plot(fund['Total_Real'],color='k',linestyle='dashed')
+ax2.set_ylabel('Federal Astronomy Research Funds (2009M$, Dashed)',rotation=270,va='bottom')
+plt.subplots_adjust(right=0.85)
+pdf.savefig()
+
 # PAGE 2: Job Register Ads vs. year. Matches Metcalfe 2008 Figure 3, jobs
 # per year
 plt.clf()
