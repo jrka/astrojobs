@@ -36,7 +36,11 @@ ax.bar(np.array(df['acyear'])+width,np.array(df['Foreign NTT']),
     bottom=np.array(df['US NTT']),color=color3[2],hatch='///',
     edgecolor='black',width=width)
 
-ax.legend(loc='best')
+# Blank one to add "Foreign" hatches to legend
+ax.bar(np.array(df['acyear'])+width,np.zeros(len(df['acyear'])),
+    color='white',edgecolor='black',width=0,label='Foreign, accurate for 2016-2018',hatch='///')
+
+ax.legend(loc='best',prop={'size': 10},frameon=False)
 
 ax2=ax.twinx()
 deg = pd.read_csv('./degrees.txt', comment='#',
