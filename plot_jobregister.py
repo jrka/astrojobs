@@ -3,23 +3,31 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
+# 2020-08-06: Add 2019-2022 data. Had to explicitly state encoding of 2019 table.
+# Update print calls for python 3.x.
 # 2019-06-10: Major updates. Combine original job table with new
 # one collected in 2019. Read in funding data.
 
 # Read in the .csv file as a pandas dataframe
-# Combine the two separate tables.
+# Combine the three separate tables.
 df = pd.read_csv('./jobregister_table.csv')
 df['country']='unknown'
 df.set_index('i')
-df2= pd.read_csv('./jobregister_table_2019.csv')
+df2= pd.read_csv('./jobregister_table_2019.csv',encoding="iso-8859-1")
 df2['i']+=len(df)
 df2.set_index('i')
 df=df.append(df2,sort=False)
 df.reset_index(drop=True)
-# Only choose academic years between 2003 and 2018 (inclusive), which are
-# complete as of June 2019
+# Add June 2019 - May 2022 Data
+df3 = pd.read_csv('./jobregister_table_2022.csv')
+df3['i']+=len(df)
+df3.set_index('i')
+df=df.append(df3,sort=False)
+df.reset_index(drop=True)
+# Only choose academic years between 2003 and 2021 (inclusive), which are
+# complete as of data collected in August 2022. 
 df = df[df.acyear >= 2003]
-df = df[df.acyear <= 2018]
+df = df[df.acyear <= 2021]
 
 # Read in the additional tables.
 # Read in the degree information by year
@@ -62,8 +70,8 @@ color8 = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3',
 # "crossover" year.
 for yr in set(df.year):
     cats = set(df[df.year == yr]['category'])
-    print yr, len(cats)
-    print cats
+    print(yr, len(cats))
+    print(cats)
 
 # Combine these as such:
 df.category[np.any([df.category == 'TT', df.category ==
@@ -344,4 +352,4 @@ pdf.close()
 # Months
 df.groupby('month')['month'].value_counts()
 for mo in np.arange(12) + 1:
-    print mo, np.sum(df.month == mo) / float(len(df))
+    print(mo, np.sum(df.month == mo) / float(len(df)))

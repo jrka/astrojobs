@@ -18,6 +18,7 @@ import glob
 # - Getting HTTP Error 403: Forbidden error. The URL string is still correct. 
 #   Fix is based on: https://stackoverflow.com/questions/16627227/problem-http-error-403-in-python-3-web-scraping
 # - pickle error,TypeError: write() argument must be str, not bytes, "w" to "wb"
+# - Encoding character change for the Country field.
 
 class AppURLopener(urllib.request.FancyURLopener):
     version = "Mozilla/5.0"
@@ -39,7 +40,7 @@ docrawl=False
 # batches of 100 job postings, because the connection is sometimes lost.
 # This allows you to restart at a given point in the list without having to 
 # redo the entire thing.
-doscrape=True
+doscrape=False
 
 #------
     
@@ -117,7 +118,8 @@ start=[r'datatype="xsd:dateTime" property="dc:date">',
        'Institution Classification/Type: </div><div class="field-items"><div class="field-item even">',
        'Job Announcement Text: </div><div class="field-items"><div class="field-item even" property="content:encoded">',
        '<h1 class="title" id="page-title">',
-       'Country:\xc2\xa0</div><div class="field-items"><div class="field-item even">']
+       #'Country:\xc2\xa0</div><div class="field-items"><div class="field-item even">']
+       'Country:\xa0</div><div class="field-items"><div class="field-item even">']
 end=['</span>','</span>','</span>','</div></div></div>','</div></div></div>',
     '</div></div></div>','</div></div></div>','</h1>','</div></div></div>']
         
@@ -173,6 +175,8 @@ if doscrape:
     
 # Read in and combine all our pickles.
 pickles=glob.glob('./alljobs2022_*to*.pkl')
+# Put them in order
+pickles.sort()
 data=[]
 for i, f in enumerate(pickles):
     tmp=pickle.load(open(f,"rb"))
