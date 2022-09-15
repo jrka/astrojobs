@@ -2,7 +2,7 @@
 # Table 10.1—GROSS DOMESTIC PRODUCT AND DEFLATORS USED IN THE HISTORICAL TABLES: 1940–2021
 # (Fiscal Year 2009 = 1.000)
 # Column: Composite Outlay Deflators, Other Grants
-# 2016-2021 are estimates
+# 2016-2022 are estimates (2022 data from Aug that year)
 Year Deflator
 1970 0.1494
 1971 0.1601
@@ -56,3 +56,4 @@ Year Deflator
 2019 1.2776
 2020 1.3190
 2021 1.3610
+2022 1.3810

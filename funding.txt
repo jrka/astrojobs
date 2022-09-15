@@ -16,7 +16,7 @@
 # For "NASA" and "NSF" fields, go to "Federal obligations for research in environmental and physical sciences, by agency and detailed field:" (Table 23 for 2003-2005 through 2010-2013)
 # Starting in 2011, "Federal obligations for research in physical sciences, by agency and detailed field: ", Now Table 27
 # and choose the column for that agency corresponding to "Astronomy"
-# Starting in 2016, the tables we need are now 16 and 24.
+# Starting in 2016, the tables we need are now 16 and 36. There were several format changes, so sometimes you need to re-load the original link, and the tables jump around a lot... But near 16 and 36 should be okay. Sometimes you have to download a PDF.
 # Starting in 2010 an extra decimal place was reported; this has been rounded.
 Year Total NASA NSF 
 1970 136.455 100.875 19.922 
@@ -65,4 +65,8 @@ Year Total NASA NSF
 2013 1146.956 860.490 232.449
 2014 1191.591 890.281 241.276
 2015 1230.156 937.028 240.905
-2016 1246.699 954.577 238.745
+2016 1246.699 801.412 238.305
+2017 1292.435 836.822 247.788 
+2018 887.399  580.406 298.634
+2019 1583.418 1270.677 256.381
+2020 871.341  612.490 252.454

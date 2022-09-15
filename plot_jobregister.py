@@ -224,6 +224,7 @@ plt.ylabel('All Job Register Ads / New U.S. PhD')
 plt.xlabel('Academic Year')
 plt.legend(loc='best')
 xlim4=plt.xlim() # Save for next one.
+print(xlim4)
 ylim4=plt.ylim() # Save for next one.
 pdf.savefig()
 
