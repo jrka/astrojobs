@@ -65,7 +65,7 @@ if docrawl:
         if year=='2019':
             monthlist=['06','07','08','09','10','11','12']
         elif year=='2022':
-            monthlist=['01','02','03','04','05']
+            monthlist=['01','02','03','04','05', '06', '07', '08', '09']
         else:
             monthlist=['01','02','03','04','05','06','07','08','09','10','11','12']
         for month in monthlist:
@@ -157,7 +157,6 @@ if doscrape:
             d[fields_dict[i]]=result
         # Add dictionary to our list
         data.append(d)
-        
         # Output progress and save as we go, because sometimes we lose connection
         if u>0 and np.mod(u+startind+1,100)==0 or (u+startind==len(newlist)-1):
             print(u+startind+1,'of',len(newlist))
@@ -172,7 +171,6 @@ if doscrape:
                 pickle.dump(data[ind1:u+1],open(pfile,"wb"))
             else:
                 pickle.dump(data[ind1:],open(pfile,"wb"))
-    
 # Read in and combine all our pickles.
 pickles=glob.glob('./alljobs2022_*to*.pkl')
 # Put them in order
