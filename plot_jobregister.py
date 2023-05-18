@@ -27,7 +27,7 @@ df.reset_index(drop=True)
 # Only choose academic years between 2003 and 2021 (inclusive), which are
 # complete as of data collected in August 2022. 
 df = df[df.acyear >= 2003]
-df = df[df.acyear <= 2021]
+df = df[df.acyear <= 2022]
 
 # Read in the additional tables.
 # Read in the degree information by year
@@ -64,7 +64,8 @@ pdf = PdfPages(pdffile)
 # 8-class Set1
 color8 = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3',
           '#ff7f00', '#ffff33', '#a65628', '#f781bf']
-
+rainbow = ['#e41a1c', '#ff7f00', '#4daf4a', '#377eb8','#984ea3',]
+marker8 = ['o', 's', 'p', '*', '^', '>', 'v', '<']
 # STANDARDIZE CATEGORIES, see README.md
 # Check out the available categories each year. Note 2008 is the
 # "crossover" year.
@@ -267,7 +268,8 @@ ax1.set_xlabel('Year Posted')
 # pdf.savefig(ax1.figure)
 
 # Loop for future plots...
-nplot = 6
+nplot = 7
+df.sort_values(['year', 'month'], inplace=True)
 for i in range(nplot):
     plt.cla()
 
@@ -279,41 +281,55 @@ for i in range(nplot):
         group = df.groupby(df.acyear)['instclass']
         ytitle = 'Original Classification, '
         xtitle = 'Academic Year'
-    # elif i==2:
-    #    group=df.groupby('month')['year']
-    #    ytitle=''
-    elif i == 2:
+    elif i==2:
+        new_df = df[df['year']>2017]
+        group=new_df.groupby('year', sort=True)['month']
+        ytitle=''
+        xtitle = 'Months'
+        import pdb; pdb.set_trace()
+    elif i == 3:
         group = df.groupby(df.acyear)['instclass_wforeign']
         ytitle = 'Redone Foreign Classification (2016 and up)'
         xtitle = 'Academic Year'
-    elif i == 3:
+    elif i == 4:
         group = df.groupby(df.category)['instclass_wforeign']
         ytitle = ''
         xtitle = 'Job Category, redone Foreign classification (2016 and up)'
-    elif i == 4:
+    elif i == 5:
         group = df[df.instclass_wforeign == 'Foreign']
         group = group.groupby(group.year)['category']
         ytitle = 'Foreign Only, '
         xtitle = 'Academic Year'
-    elif i == 5:
+    elif i == 6:
         group = df[df.instclass_wforeign != 'Foreign']
         group = group.groupby(group.year)['category']
         ytitle = 'US Only, '
         xtitle = 'Academic Year'
+    
 
     # Stacked, then unstacked. No, don't do unstacked.
     for stacked in [True]:  # [True,False]
         plt.cla()
-        ax = group.value_counts().unstack(1).plot(kind='bar',
+        if i == 2:
+            #Loop over groups to enable each year to have a different marker for colorblind readability
+            for igroup, imarker, icolor in zip(group, marker8, rainbow):
+                ax = igroup[1].value_counts(sort=False).plot(kind='line', color=icolor, ax=ax1,figsize=(11, 8), 
+                                            marker=imarker, markersize=8, label=igroup[0])
+            ax.set_xticks(np.arange(1,13))
+            ax.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+            ax.grid(axis='x', alpha=0.2)
+
+        else:
+            ax = group.value_counts().unstack(1).plot(kind='bar',
                                                   color=color8, ax=ax1,
                                                   stacked=stacked, figsize=(11, 8))
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.10),
                   ncol=3, fancybox=True, shadow=True, fontsize=10)
         ax.set_ylabel(ytitle + 'Number of Job Register Ads')
         ax.set_xlabel(xtitle)
-        if i>=3: ax.axvline(2015.5,color='gray')
+        if i>=4: ax.axvline(2015.5,color='gray')
         pdf.savefig(ax.figure)
-
+        
     # Then stacked and percentage.
     plt.cla()
     ax = group.value_counts(normalize=True).unstack(1).plot(kind='bar', color=color8, ax=ax1,
