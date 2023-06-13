@@ -27,7 +27,7 @@ df.reset_index(drop=True)
 # Only choose academic years between 2003 and 2021 (inclusive), which are
 # complete as of data collected in August 2022. 
 df = df[df.acyear >= 2003]
-df = df[df.acyear <= 2021]
+#df = df[df.acyear <= 2021]
 
 # Read in the additional tables.
 # Read in the degree information by year
