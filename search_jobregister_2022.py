@@ -6,7 +6,7 @@ import pandas as pd
 import pickle as pickle
 import glob
 
-# Major changes from 2019 script:
+# Major changes from 2019 script (8/6/22)
 # - Save everything to new .csv and .pkl files with "2022" in file name; refers to 
 #   this new search done in 2022, but job ad data is from June 2019 through May 2022. 
 # - This illustrates that my coding is weaksauce and someone could easily make 
@@ -19,6 +19,17 @@ import glob
 #   Fix is based on: https://stackoverflow.com/questions/16627227/problem-http-error-403-in-python-3-web-scraping
 # - pickle error,TypeError: write() argument must be str, not bytes, "w" to "wb"
 # - Encoding character change for the Country field.
+#
+# Additional changes 8/18/22
+# - Add any fields having to do with Pay Compensation.
+#     They are: salary min, salary max, hourly rate min, hourly rate max, stipend, compensation notes
+#     Also Benefits
+# - Create two versions of the resulting .csv file:
+#   One with the job text, pay compensation, or benefits.
+#   One without (usual)
+# Example with hourly: https://jobregister.aas.org/ad/8b8e13de
+# Example with salary: https://jobregister.aas.org/ad/3af94175
+# Example with stipend: view-source:https://jobregister.aas.org/ad/27fc0021
 
 class AppURLopener(urllib.request.FancyURLopener):
     version = "Mozilla/5.0"
@@ -33,14 +44,14 @@ opener=AppURLopener()
 # If you already have jobregister_urls_new.txt, no need to crawl, will just read
 # the contents of that file instead. This is included in the github repo but
 # of course can be updated.
-docrawl=False
+docrawl=True
 
 # The scraping loops through all the URLs in the aforementioned file and 
 # grabs the relevant field information. These are saved in .pkl files in 
 # batches of 100 job postings, because the connection is sometimes lost.
 # This allows you to restart at a given point in the list without having to 
 # redo the entire thing.
-doscrape=False
+doscrape=True
 
 #------
     
@@ -104,10 +115,18 @@ fields=['field-name-field-publish-date',
         'field-name-field-institution-classification',
         'field-type-text-with-summary', # The main text
         'title',
-        'field-name-field-location-country']
+        'field-name-field-location-country',
+        'field-name-field-salary-min',# Add more 8/16/22
+        'field-name-field-salary-max',
+        'field-name-field-hourly-rate-min',
+        'field-name-field-hourly-rate-max',
+        'field-name-field-stipend',
+        'field-name-field-benefits',
+        'field-name-field-location-zip-postal'] # Added 11/27/22
 
 # Shortened dictionary names for the above.
-fields_dict=['post','archive','deadline','category','inst','instclass','text','title','country']
+fields_dict=['post','archive','deadline','category','inst','instclass','text','title','country',
+    'salary-min','salary-max','hourly-min','hourly-max','stipend','benefits','postalcode']
 
 # Start and end strings to find the contents of those fields above.
 start=[r'datatype="xsd:dateTime" property="dc:date">',
@@ -119,9 +138,18 @@ start=[r'datatype="xsd:dateTime" property="dc:date">',
        'Job Announcement Text: </div><div class="field-items"><div class="field-item even" property="content:encoded">',
        '<h1 class="title" id="page-title">',
        #'Country:\xc2\xa0</div><div class="field-items"><div class="field-item even">']
-       'Country:\xa0</div><div class="field-items"><div class="field-item even">']
+       'Country:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Salary Min:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Salary Max:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Hourly Rate Min:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Hourly Rate Max:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Stipend:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Included Benefits:\xa0</div><div class="field-items"><div class="field-item even">',
+       'Zip/Postal:\xa0</div><div class="field-items"><div class="field-item even">']
 end=['</span>','</span>','</span>','</div></div></div>','</div></div></div>',
-    '</div></div></div>','</div></div></div>','</h1>','</div></div></div>']
+    '</div></div></div>','</div></div></div>','</h1>','</div></div></div>', # Ends w/ country
+    '</div></div></div>','</div></div></div>','</div></div></div>','</div></div></div>',
+    '</div></div></div>','</div></div></div>','</div></div></div>']
         
 ######### SCRAPE ALL JOB ADS FOR INFO, SAVE PERIODICALLY IN GROUPS OF 100
 # Sometimes the connection is lost; you can restart using startind as a multiple of 100
@@ -143,6 +171,12 @@ if doscrape:
                 try: # I am not sure why this is as such. 
                     s=str(soup.find_all("div",class_=f)[0])
                     result=s
+                except:
+                    result=''
+            elif f=='field-name-field-benefits':
+                try: # I am not sure why this is as such. 
+                    s=str(soup.find_all("div",class_=f)[0])
+                    result=s.partition(start[i])[2].partition(end[i])[0]
                 except:
                     result=''
             elif f=='title':
@@ -202,4 +236,7 @@ df['acyear'][df['month']<=5]=df['year'].copy()-1
 # Save the contents of this dataframe, except the job text, which is large (file size is ~ 10x as large)
 # Also don't save the deadline or archive date. Just the posting year and month.
 df.to_csv('./jobregister_table_2022.csv',
-    columns=['i','year','month','acyear','title','category','inst','instclass','url','country'])
+    columns=['i','year','month','acyear','title','category','inst','instclass','url','country','postalcode'])
+    
+# Added 8/16/22 with all the rest of the fields.
+df.to_csv('./jobregister_table_2022_extrafields.csv')
