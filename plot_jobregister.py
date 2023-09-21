@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
+# 2023-09-20: Change plot titles referencing 2009 dollars to 2012 dollars.
+#     Replace deprecated pandas frame.append method; use pandas.concat instead.
 # 2020-08-06: Add 2019-2022 data. Had to explicitly state encoding of 2019 table.
 # Update print calls for python 3.x.
 # 2019-06-10: Major updates. Combine original job table with new
@@ -16,13 +18,13 @@ df.set_index('i')
 df2= pd.read_csv('./jobregister_table_2019.csv',encoding="iso-8859-1")
 df2['i']+=len(df)
 df2.set_index('i')
-df=df.append(df2,sort=False)
+df=pd.concat([df,df2])#df.append(df2,sort=False)
 df.reset_index(drop=True)
 # Add June 2019 - May 2022 Data
 df3 = pd.read_csv('./jobregister_table_2022.csv')
 df3['i']+=len(df)
 df3.set_index('i')
-df=df.append(df3,sort=False)
+df=pd.concat([df,df3])#df.append(df3,sort=False)
 df.reset_index(drop=True)
 # Only choose academic years between 2003 and 2021 (inclusive), which are
 # complete as of data collected in August 2022. 
@@ -143,7 +145,7 @@ pdf.savefig()
 plt.cla()
 ax = fund[['Total_Real','NASA_Real','NSF_Real']].plot(kind='line')
 ax.set_xlabel('Fiscal Year')
-ax.set_ylabel('Federal Astronomy Research Funding (2009M$)')
+ax.set_ylabel('Federal Astronomy Research Funding (2012M$)')
 pdf.savefig()
 
 # PAGE 1C: Combine the previous two, in a nicer format, for white paper.
@@ -155,7 +157,7 @@ ax1.set_xlabel('Academic Year or Fiscal Year')
 ax1.set_ylabel('Number of Astronomy PhDs (Solid)')
 ax2=ax1.twinx()
 ax2.plot(fund['Total_Real'],color='k',linestyle='dashed')
-ax2.set_ylabel('Federal Astronomy Research Funds (2009M$, Dashed)',rotation=270,va='bottom')
+ax2.set_ylabel('Federal Astronomy Research Funds (2012M$, Dashed)',rotation=270,va='bottom')
 plt.subplots_adjust(right=0.85)
 pdf.savefig()
 
@@ -286,7 +288,7 @@ for i in range(nplot):
         group=new_df.groupby('year', sort=True)['month']
         ytitle=''
         xtitle = 'Months'
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
     elif i == 3:
         group = df.groupby(df.acyear)['instclass_wforeign']
         ytitle = 'Redone Foreign Classification (2016 and up)'
@@ -305,7 +307,6 @@ for i in range(nplot):
         group = group.groupby(group.year)['category']
         ytitle = 'US Only, '
         xtitle = 'Academic Year'
-    
 
     # Stacked, then unstacked. No, don't do unstacked.
     for stacked in [True]:  # [True,False]
