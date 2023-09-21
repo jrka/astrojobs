@@ -10,7 +10,7 @@
 #     Table 1L: Federal obligations for total research, by detailed field of science & engineering: National Science Foundation, fiscal years 1970-2003	
 # Unfortunately, subsequent data appears to be in groups of 3 years. 
 # "Historically, the Federal funds data are collected annually for 3 government fiscal years at a time: the fiscal year just completed, the current fiscal year, and the next fiscal year. Actual data are collected for the year just completed; estimates are obtained for the current and next fiscal year. "
-# https://nsf.gov/statistics/srvyfedfunds/#tabs-2
+# https://nsf.gov/statistics/srvyfedfunds/#tabs-2 or more likely https://ncses.nsf.gov/surveys/federal-funds-research-development/ (which will auto-port you to the most recent year)
 # For each year, go to "Total Research—Agency, Performer, and Field of Science and Engineering"
 # Then for "Total" astronomy data, "Federal obligations for research, by detailed field of science and engineering: " (Table 19 for 2003-2005 and on)
 # For "NASA" and "NSF" fields, go to "Federal obligations for research in environmental and physical sciences, by agency and detailed field:" (Table 23 for 2003-2005 through 2010-2013)

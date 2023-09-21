@@ -6,9 +6,10 @@
 # 2007-2014 AIP statistics added from https://www.aip.org/sites/default/files/statistics/rosters/astrost14.pdf
 # 2015-2017 AIP statistics from https://www.aip.org/sites/default/files/statistics/rosters/astrost17.pdf
 # 2018-2020 AIP statistics from https://www.aip.org/sites/default/files/statistics/rosters/astrost20-final.pdf
+# 2020/21 AIP statistics from https://www.aip.org/sites/default/files/statistics/rosters/AstRost21.pdf
 # 2006-2014 SED statistics added from http://www.nsf.gov/statistics/2016/nsf16300/data-tables.cfm (Table 13)
 # 2015-2017 SED statistics added from https://ncses.nsf.gov/pubs/nsf19301/data (Table 13)
-# 2018-202 SED statistics (and minor updates to 2016+2017 numbers) from https://ncses.nsf.gov/pubs/nsf22300/assets/data-tables/tables/nsf22300-tab013.pdf
+# 2018-202? SED statistics (and minor updates to 2016+2017 numbers) from https://ncses.nsf.gov/pubs/nsf22300/assets/data-tables/tables/nsf22300-tab013.pdf
 # 2007-2014 UMI statistics added from http://search.proquest.com/advanced
 #    After consulting with the ProQuest support in May 2016, it doesn't seem there is a way 
 #    to limit the “Dissertations & Theses” database to those awarded by a domestic university. 
@@ -64,3 +65,4 @@ Year AIP SED UMI
 2018 173 351 ...
 2019 159 361 ...
 2020 155 305 ...
+2021 171 263 ...
