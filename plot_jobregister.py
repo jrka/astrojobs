@@ -5,6 +5,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 # 2023-09-20: Change plot titles referencing 2009 dollars to 2012 dollars.
 #     Replace deprecated pandas frame.append method; use pandas.concat instead.
+#     Use _2023 instead of _2022 csv
 # 2020-08-06: Add 2019-2022 data. Had to explicitly state encoding of 2019 table.
 # Update print calls for python 3.x.
 # 2019-06-10: Major updates. Combine original job table with new
@@ -21,13 +22,13 @@ df2.set_index('i')
 df=pd.concat([df,df2])#df.append(df2,sort=False)
 df.reset_index(drop=True)
 # Add June 2019 - May 2022 Data
-df3 = pd.read_csv('./jobregister_table_2022.csv')
+df3 = pd.read_csv('./jobregister_table_2023.csv')
 df3['i']+=len(df)
 df3.set_index('i')
 df=pd.concat([df,df3])#df.append(df3,sort=False)
 df.reset_index(drop=True)
-# Only choose academic years between 2003 and 2021 (inclusive), which are
-# complete as of data collected in August 2022. 
+# Only choose academic years between 2003 and 2022 (inclusive), which are
+# complete as of data collected in September 2023. 
 df = df[df.acyear >= 2003]
 df = df[df.acyear <= 2022]
 

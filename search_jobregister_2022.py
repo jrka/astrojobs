@@ -30,6 +30,10 @@ import glob
 # Example with hourly: https://jobregister.aas.org/ad/8b8e13de
 # Example with salary: https://jobregister.aas.org/ad/3af94175
 # Example with stipend: view-source:https://jobregister.aas.org/ad/27fc0021
+#
+# Changes 9/20/23
+# Include all of academic year 2022 - through May 2023.
+# Save as _2023.csv files
 
 class AppURLopener(urllib.request.FancyURLopener):
     version = "Mozilla/5.0"
@@ -62,7 +66,7 @@ if docrawl:
 	# the previous links are available. Individual job links seem to work back 
 	# through January 2017; January 2016's links don't work. But June 2016 works,
 	# and I left off in May 2016, so perfect timing!
-    yearlist=['2019','2020','2021','2022']
+    yearlist=['2019','2020','2021','2022','2023']
     #archive='https://jobregister.aas.org/jobs/archive'
     #r=urllib.urlopen(archive).read()
     #archivesoup = BeautifulSoup(r)
@@ -75,8 +79,8 @@ if docrawl:
     for year in yearlist: 
         if year=='2019':
             monthlist=['06','07','08','09','10','11','12']
-        elif year=='2022':
-            monthlist=['01','02','03','04','05', '06', '07', '08', '09']
+        elif year=='2023':
+            monthlist=['01','02','03','04','05']
         else:
             monthlist=['01','02','03','04','05','06','07','08','09','10','11','12']
         for month in monthlist:
@@ -96,11 +100,11 @@ if docrawl:
     # Remove Duplicates in List
     newlist=list(set(alllist))
     # Print to a file
-    with open('jobregister_urls_2022.txt','w') as f:
+    with open('jobregister_urls_2023.txt','w') as f:
         for item in newlist:
             f.write("%s\n" % item)
 else:
-    with open('jobregister_urls_2022.txt') as f:
+    with open('jobregister_urls_2023.txt') as f:
         newlist=f.read().splitlines()
     
 #-------------
@@ -199,14 +203,14 @@ if doscrape:
                 ind1=u-99 
             else:
                 ind1=u-np.mod(len(newlist)-1,100) # Don't go back a full 99 if just at end of list.
-            pfile='alljobs2022_'+str(data[ind1]['i']).zfill(5)+'to'+str(u+startind).zfill(5)+'.pkl'
+            pfile='alljobs2023_'+str(data[ind1]['i']).zfill(5)+'to'+str(u+startind).zfill(5)+'.pkl'
             print(pfile)
             if (u+startind!=len(newlist)-1): # In retrospect, this is not necessary to split up.
                 pickle.dump(data[ind1:u+1],open(pfile,"wb"))
             else:
                 pickle.dump(data[ind1:],open(pfile,"wb"))
 # Read in and combine all our pickles.
-pickles=glob.glob('./alljobs2022_*to*.pkl')
+pickles=glob.glob('./alljobs2023_*to*.pkl')
 # Put them in order
 pickles.sort()
 data=[]
@@ -235,8 +239,8 @@ df['acyear'][df['month']<=5]=df['year'].copy()-1
 
 # Save the contents of this dataframe, except the job text, which is large (file size is ~ 10x as large)
 # Also don't save the deadline or archive date. Just the posting year and month.
-df.to_csv('./jobregister_table_2022.csv',
+df.to_csv('./jobregister_table_2023.csv',
     columns=['i','year','month','acyear','title','category','inst','instclass','url','country','postalcode'])
     
 # Added 8/16/22 with all the rest of the fields.
-df.to_csv('./jobregister_table_2022_extrafields.csv')
+df.to_csv('./jobregister_table_2023_extrafields.csv')
